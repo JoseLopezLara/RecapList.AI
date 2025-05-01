@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RecapsController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -27,3 +28,6 @@ Route::get('/test', [TestController::class, 'testComponent']);
 Route::get('/test-recap', [TestController::class, 'testRecap']);
 
 require __DIR__.'/auth.php';
+
+//e::post('/api/recaps-store', [RecapsController::class, 'store']);
+

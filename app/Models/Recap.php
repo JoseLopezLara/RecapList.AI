@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recap extends Model
 {
+
+    protected $table = "recaps";
     protected $fillable = [
         'content',
+        'title',
         'date',
         'status'
     ];
