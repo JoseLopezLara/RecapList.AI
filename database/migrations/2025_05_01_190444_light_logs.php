@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recaps', function (Blueprint $table) {
+        Schema::create('light_logs', function (Blueprint $table) {
             $table->id();
-            $table->text('content');
-            $table->string('title', 254);
-            $table->string('date');
-            $table->string('status', 7)->default('TO');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('recaps');
+        //
     }
 };

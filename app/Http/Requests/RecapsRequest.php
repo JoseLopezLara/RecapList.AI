@@ -23,7 +23,7 @@ class RecapsRequest extends FormRequest
     {
         return [
             'content' => 'required|string|max:255',
-            'date' => 'required|date_format:Y-m-d H:i:s',
+            'date' => 'required',
             'status' => 'required|in:TO',
         ];
     }

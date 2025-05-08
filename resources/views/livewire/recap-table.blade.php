@@ -8,6 +8,8 @@
             columns: @js($columns),
             draggingCard: null,
             sourceColumn: null,
+            showModal: false,
+            selectedCard: null,
 
             startDrag(column, card) {
                 this.draggingCard = card;
@@ -57,6 +59,11 @@
 
             dragOver(e) {
                 e.preventDefault();
+            },
+
+            openCardModal(card) {
+                this.selectedCard = card;
+                this.showModal = true;
             }
         }"
         @card-moved.window="updateCardStatus($event.detail.cardId, $event.detail.newStatus)"
@@ -73,10 +80,11 @@
                     <div class="flex flex-col gap-3 flex-grow">
                         <template x-for="card in column.cards" :key="card.id">
                             <div
-                                class="bg-white dark:bg-gray-800 p-3 rounded shadow transition-all duration-300 cursor-move hover:shadow-md border border-gray-200 dark:border-gray-600"
+                                class="bg-white dark:bg-gray-800 p-3 rounded shadow transition-all duration-300 cursor-pointer hover:shadow-md border border-gray-200 dark:border-gray-600"
                                 :class="draggingCard && draggingCard.id === card.id ? 'opacity-50 scale-105' : ''"
                                 draggable="true"
                                 @dragstart="startDrag(column, card)"
+                                @click="openCardModal(card)"
                             >
                                 <div class="font-medium mb-2 text-gray-800 dark:text-white" x-text="card.title"></div>
                                 <div class="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2" x-text="card.content"></div>
@@ -92,6 +100,45 @@
                     </div>
                 </div>
             </template>
+        </div>
+
+        <!-- Modal -->
+        <div
+            x-show="showModal"
+            x-cloak
+            class="fixed inset-0 z-50 overflow-y-auto backdrop-blur-sm bg-white/30 dark:bg-gray-900/30"
+            @click.self="showModal = false"
+        >
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div
+                    class="bg-white/95 dark:bg-gray-800/95 rounded-lg w-[800px] h-[600px] shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col backdrop-blur-md"
+                    @click.stop
+                >
+                    <div class="flex justify-between items-start p-6 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white" x-text="selectedCard?.title"></h3>
+                        <button
+                            @click="showModal = false"
+                            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                        >
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="flex-1 p-6 overflow-y-auto">
+                        <p class="text-gray-600 dark:text-gray-300 text-lg" x-text="selectedCard?.content"></p>
+                    </div>
+                    <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500 dark:text-gray-400" x-text="selectedCard?.date"></span>
+                            <span
+                                class="px-4 py-2 text-sm rounded-full font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100"
+                                x-text="selectedCard?.status"
+                            ></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
